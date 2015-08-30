@@ -1,207 +1,62 @@
 package ua.com.juja.core.SQLCmd;
 
-import java.sql.*;
 import java.util.Arrays;
 
 /**
- * Created by ubuntu on 8/23/15.
+ * Created by Anka on 30.08.2015.
  */
-public class DatabaseManager {
-    private Connection connection;
+public class DataSet {
+    static class Data {
+        private String name;
+        private  Object value;
 
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        String database = "postgres";
-        String userName = "postgres";
-        String password = "12345";
-        DatabaseManager databaseManager = new DatabaseManager();
+        public Data (String name, Object value) {
+            this.name = name;
+            this.value = value;
+        }
 
-        databaseManager.connect(database, userName, password);
+        public Object getValue() {
+            return value;
+        }
 
-        //Connection connection = databaseManager.getConnection();
-
-        //delete
-        databaseManager.clear("user");
-
-        // insert
-        DataSet dataSet = new DataSet();
-        dataSet.put("user_id", 13);
-        dataSet.put("name", "Stiven");
-        dataSet.put("password", "12345");
-        databaseManager.create(dataSet);
-
-        //update
-        /*stmt = connection.createStatement();
-        String sql = "UPDATE public.user set password = 12345 where user_id=1;";
-        stmt.executeUpdate(sql);
-        stmt.close();*/
-
-        // select
-        String tableName = "user";
-        DataSet[] tableData = databaseManager.getTableData(tableName);
-
-        System.out.println(Arrays.toString(tableData));
-
-        // table names
-        String[] tables = databaseManager.getTableNames();
-
-        System.out.println(Arrays.toString(tables));
-    }
-
-    public DataSet[] getTableData(String tableName) {
-        try {
-            int size = getSize(tableName);
-            Statement stmt = connection.createStatement();
-            ResultSet resultSet = stmt.executeQuery("SELECT * FROM public.user");
-            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-            DataSet[] result = new DataSet[size];
-            int index = 0;
-
-            while (resultSet.next()) {
-                DataSet dataSet = new DataSet();
-                result[index] = dataSet;
-                index += 1;
-
-                for ( int i = 1; i <= resultSetMetaData.getColumnCount(); i++ ) {
-                    dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
-                }
-            }
-
-            resultSet.close();
-            stmt.close();
-
-            return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-            return new DataSet[0];
+        public String getName() {
+            return name;
         }
     }
 
-    public int getSize(String tableName) throws SQLException {
-        int size = 0;
-        Statement stmt = connection.createStatement();
-        ResultSet rsCount = stmt.executeQuery("SELECT COUNT(*) FROM public." + tableName);
+    public Data[] data = new Data[100]; //TODO: remove magig 100
+    public int currentIndex = 0;
 
-        rsCount.next();
+    public String[] getNames() {
+        String[] names = new String[currentIndex];
 
-        size = rsCount.getInt(1);
-
-        rsCount.close();
-
-        return size;
-    }
-
-    public String[] getTableNames() {
-        try {
-            Statement stmt = connection.createStatement();
-            String[] tables = new String[100];
-            int index = 0;
-            ResultSet rs = stmt.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'");
-
-            while (rs.next()) {
-                tables[index] = rs.getString("table_name");
-                index += 1;
-            }
-
-            rs.close();
-            stmt.close();
-
-            tables = Arrays.copyOf(tables, index, String[].class);
-
-            return tables;
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-            return new String[0];
-        }
-    }
-
-    public void connect(String database, String userName, String password) {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            System.out.println("Please add jdbc jar to project.");
-            e.printStackTrace();
-        }
-        try {
-            connection = DriverManager.getConnection(
-                    "jdbc:postgresql://127.0.0.1:5432/" + database, userName,
-                    password);
-        } catch (SQLException e) {
-            System.out.println(String.format("Cant get connection for database:%s user:%s", database, userName));
-            e.printStackTrace();
-
-            connection = null;
-        }
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public void clear(String tableName) {
-        try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("DELETE from public." + tableName);
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void create(DataSet input) {
-        try {
-
-
-
-            Statement stmt = connection.createStatement();
-            String columnsName = getNameFormated(input, "%s,");
-            String values = getValuesFormated(input, "'%s',");
-
-           stmt.executeUpdate("INSERT INTO public.user (" + columnsName +
-                    ") VALUES (" + values + ")");
-            /*stmt.executeUpdate("INSERT INTO public.user (user_id, name, password)" +
-                    "VALUES (13, 'Stiven6', 'Pupkin')");*/
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void update(String tableName, int id, DataSet dataSet) {
-        try {
-            Statement stmt = connection.createStatement();
-            String sql = "UPDATE public.user set password = 12345 where user_id=1;";
-            stmt.executeUpdate(sql);
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getNameFormated(DataSet newValue, String format) {
-        String[] names = newValue.getNames();
-        int last = names.length - 1;
-        String string = "";
-
-        for ( int i = 0; i < last; i++ ) {
-            string += String.format(format, names[i]);
+        for ( int i = 0; i < currentIndex; i++ ) {
+            names[i] = data[i].getName();
         }
 
-        string += names[last];
-
-        return string;
+        return  names;
     }
 
-    private String getValuesFormated(DataSet input, String format) {
-        String values = "";
+    public Object[] getValues() {
+        Object[] values = new Object[currentIndex];
 
-        for (Object value: input.getValues()) {
-            values += String.format(format, value);
+        for ( int i = 0; i < currentIndex; i++ ) {
+            values[i] = data[i].getValue();
         }
 
-        values = values.substring(0, values.length() - 1);
+        return  values;
+    }
 
-        return values;
+    public void put(String name, Object value) {
+        data[currentIndex] = new Data(name, value);
+        currentIndex += 1;
+    }
+
+    @Override
+    public String toString() {
+        return "DataSet{\n" +
+                "names:" + Arrays.toString(getNames()) + "\n" +
+                "values:" + Arrays.toString(getValues()) + "\n" +
+                "}";
     }
 }
