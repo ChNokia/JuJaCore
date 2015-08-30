@@ -62,7 +62,7 @@ public class DatabaseManagerTest {
 
         //when
         DataSet newValue = new DataSet();
-        input.put("password", "123456");
+        newValue.put("password", "123456");
         manager.update(tableName, 13, newValue);
 
         //then
