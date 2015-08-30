@@ -151,27 +151,14 @@ public class DatabaseManager {
 
     public void create(DataSet input) {
         try {
-            String[] names = input.getNames();
-            Object[] data = input.getValues();
-            int last = names.length - 1;
+
+
+
             Statement stmt = connection.createStatement();
             String columnsName = getNameFormated(input, "%s,");
             String values = getValuesFormated(input, "'%s',");
 
-           /* for ( int i = 0; i < last; i++ ) {
-                columnsName = columnsName + names[i] + ",";
-            }
-
-            columnsName += names[last];*/
-            /*last = data.length - 1;
-
-            for ( int i = 0; i < last; i++ ) {
-                values = values + "'" + data[i].toString() + "''" + ",";
-            }
-
-            values += names[last];*/
-
-            stmt.executeUpdate("INSERT INTO public.user (" + columnsName +
+           stmt.executeUpdate("INSERT INTO public.user (" + columnsName +
                     ") VALUES (" + values + ")");
             /*stmt.executeUpdate("INSERT INTO public.user (user_id, name, password)" +
                     "VALUES (13, 'Stiven6', 'Pupkin')");*/
@@ -181,21 +168,40 @@ public class DatabaseManager {
         }
     }
 
-    private String getNameFormated(DataSet newValue, String format) {
-        String string = "";
-        for (String name : newValue.getNames()) {
-            string += String.format(format, name);
+    public void update(String tableName, int id, DataSet dataSet) {
+        try {
+            Statement stmt = connection.createStatement();
+            String sql = "UPDATE public.user set password = 12345 where user_id=1;";
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        string = string.substring(0, string.length() - 1);
+    }
+
+    private String getNameFormated(DataSet newValue, String format) {
+        String[] names = newValue.getNames();
+        int last = names.length - 1;
+        String string = "";
+
+        for ( int i = 0; i < last; i++ ) {
+            string += String.format(format, names[i]);
+        }
+
+        string += names[last];
+
         return string;
     }
 
     private String getValuesFormated(DataSet input, String format) {
         String values = "";
+
         for (Object value: input.getValues()) {
             values += String.format(format, value);
         }
+
         values = values.substring(0, values.length() - 1);
+
         return values;
     }
 }
