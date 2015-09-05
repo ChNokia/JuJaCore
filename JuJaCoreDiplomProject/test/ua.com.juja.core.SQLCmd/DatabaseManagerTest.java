@@ -8,6 +8,8 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 
 public class DatabaseManagerTest {
+    public static final String TABLE_NAME = "user";
+
     private DatabaseManager manager;
     private String database = "postgres";
     private String userName = "postgres";
@@ -28,19 +30,18 @@ public class DatabaseManagerTest {
 
     @Test
     public void testGetTableData() {
-        String tableName = "user";
         //given
-        manager.clear(tableName);
+        manager.clear(TABLE_NAME);
 
         //when
         DataSet input = new DataSet();
         input.put("user_id", 13);
         input.put("name", "Stiven");
         input.put("password", "12345");
-        manager.create(input);
+        manager.create(TABLE_NAME, input);
 
         //then
-        DataSet[] dataSets = manager.getTableData(tableName);
+        DataSet[] dataSets = manager.getTableData(TABLE_NAME);
         assertEquals(1, dataSets.length);
 
         DataSet dataSet = dataSets[0];
@@ -50,23 +51,22 @@ public class DatabaseManagerTest {
 
     @Test
     public void testUpdateTableData() {
-        String tableName = "user";
         //given
-        manager.clear(tableName);
+        manager.clear(TABLE_NAME);
 
         DataSet input = new DataSet();
         input.put("user_id", 13);
         input.put("name", "Stiven");
         input.put("password", "12345");
-        manager.create(input);
+        manager.create(TABLE_NAME, input);
 
         //when
         DataSet newValue = new DataSet();
         newValue.put("password", "123456");
-        manager.update(tableName, 13, newValue);
+        manager.update(TABLE_NAME, 13, newValue);
 
         //then
-        DataSet[] dataSets = manager.getTableData(tableName);
+        DataSet[] dataSets = manager.getTableData(TABLE_NAME);
         assertEquals(1, dataSets.length);
 
         DataSet dataSet = dataSets[0];
