@@ -2,9 +2,6 @@ package ua.com.juja.core.SQLCmd;
 
 import java.util.Arrays;
 
-/**
- * Created by Anka on 30.08.2015.
- */
 public class DataSet {
     static class Data {
         private String name;
@@ -48,6 +45,14 @@ public class DataSet {
     }
 
     public void put(String name, Object value) {
+        for ( int i = 0; i < currentIndex; i++ ) {
+            if ( data[i].getName().equals(name) ) {
+                data[i].value = value;
+
+                return;
+            }
+        }
+
         data[currentIndex] = new Data(name, value);
         currentIndex += 1;
     }
