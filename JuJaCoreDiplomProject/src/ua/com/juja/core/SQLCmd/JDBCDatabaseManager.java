@@ -3,9 +3,6 @@ package ua.com.juja.core.SQLCmd;
 import java.sql.*;
 import java.util.Arrays;
 
-/**
- * Created by Anka on 06.09.2015.
- */
 public class JDBCDatabaseManager implements DatabaseManager {
     private Connection connection;
 
@@ -45,6 +42,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
         return size;
     }
 
+    @Override
     public DataSet[] getTableData(String tableName) {
         try {
             int size = getSize(tableName);
@@ -75,6 +73,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
 
+    @Override
     public String[] getTableNames() {
         try {
             Statement statement = connection.createStatement();
@@ -100,6 +99,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
 
+    @Override
     public void connect(String database, String userName, String password) {
         try {
             Class.forName("org.postgresql.Driver");
@@ -119,6 +119,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
 
+    @Override
     public void clear(String tableName) {
         try {
             Statement statement = connection.createStatement();
@@ -129,6 +130,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
 
+    @Override
     public void create(String tableNmae, DataSet input) {
         try {
             String[] names = input.getNames();
@@ -146,6 +148,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
 
+    @Override
     public void update(String tableName, int id, DataSet newValue) {
         try {
             String tableNames = getNameFormated(newValue, "%s = ?,");
