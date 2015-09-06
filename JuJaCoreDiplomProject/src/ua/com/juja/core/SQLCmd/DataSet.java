@@ -67,6 +67,14 @@ public class DataSet {
         currentIndex += 1;
     }
 
+    public void updateFrom(DataSet newValue) {
+        for ( int index = 0; index < newValue.currentIndex; index++ ) {
+            Data data = newValue.data[index];
+
+            this.put(data.name, data.value);
+        }
+    }
+
     @Override
     public String toString() {
         return "DataSet{\n" +
