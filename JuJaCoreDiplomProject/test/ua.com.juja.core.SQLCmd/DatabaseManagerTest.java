@@ -1,13 +1,13 @@
-package ua.com.juja.core.SQLCmd;
-
 import org.junit.Before;
 import org.junit.Test;
+import ua.com.juja.core.SQLCmd.DataSet;
+import ua.com.juja.core.SQLCmd.DatabaseManager;
 
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
-public class DatabaseManagerTest {
+public abstract class DatabaseManagerTest {
     public static final String TABLE_NAME = "user";
 
     private DatabaseManager manager;
@@ -17,9 +17,11 @@ public class DatabaseManagerTest {
 
     @Before
     public void setup() {
-        manager = new DatabaseManager();
+        manager = getDatabaseManager();
         manager.connect(database, userName, password);
     }
+
+    public abstract DatabaseManager getDatabaseManager();
 
     @Test
     public void testGetAllTablesName() {
@@ -35,9 +37,9 @@ public class DatabaseManagerTest {
 
         //when
         DataSet input = new DataSet();
-        input.put("user_id", 13);
-        input.put("name", "Stiven");
-        input.put("password", "12345");
+        input.put(TABLE_NAME + "_id", 13);
+        input.put(TABLE_NAME + "_name", "Stiven");
+        input.put(TABLE_NAME + "_password", "12345");
         manager.create(TABLE_NAME, input);
 
         //then
@@ -45,7 +47,7 @@ public class DatabaseManagerTest {
         assertEquals(1, dataSets.length);
 
         DataSet dataSet = dataSets[0];
-        assertEquals("[user_id, name, password]", Arrays.toString(dataSet.getNames()));
+        assertEquals(String.format("[%s_id, %s_name, %s_password]", TABLE_NAME, TABLE_NAME, TABLE_NAME), Arrays.toString(dataSet.getNames()));
         assertEquals("[13, Stiven, 12345]", Arrays.toString(dataSet.getValues()));
     }
 
@@ -55,14 +57,14 @@ public class DatabaseManagerTest {
         manager.clear(TABLE_NAME);
 
         DataSet input = new DataSet();
-        input.put("user_id", 13);
-        input.put("name", "Stiven");
-        input.put("password", "12345");
+        input.put(TABLE_NAME + "_id", 13);
+        input.put(TABLE_NAME + "_name", "Stiven");
+        input.put(TABLE_NAME + "_password", "12345");
         manager.create(TABLE_NAME, input);
 
         //when
         DataSet newValue = new DataSet();
-        newValue.put("password", "123456");
+        newValue.put(TABLE_NAME + "_password", "123456");
         manager.update(TABLE_NAME, 13, newValue);
 
         //then
@@ -70,7 +72,7 @@ public class DatabaseManagerTest {
         assertEquals(1, dataSets.length);
 
         DataSet dataSet = dataSets[0];
-        assertEquals("[user_id, name, password]", Arrays.toString(dataSet.getNames()));
+        assertEquals(String.format("[%s_id, %s_name, %s_password]", TABLE_NAME, TABLE_NAME, TABLE_NAME), Arrays.toString(dataSet.getNames()));
         assertEquals("[13, Stiven, 123456]", Arrays.toString(dataSet.getValues()));
     }
 }
