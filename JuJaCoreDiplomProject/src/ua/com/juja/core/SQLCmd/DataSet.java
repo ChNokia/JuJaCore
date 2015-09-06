@@ -44,6 +44,16 @@ public class DataSet {
         return  values;
     }
 
+    public Object get(String name) {
+        for ( int i = 0; i < currentIndex; i++ ) {
+            if (data[i].getName().equals(name)) {
+                return data[i].getValue();
+            }
+        }
+
+        return null;
+    }
+
     public void put(String name, Object value) {
         for ( int i = 0; i < currentIndex; i++ ) {
             if ( data[i].getName().equals(name) ) {
