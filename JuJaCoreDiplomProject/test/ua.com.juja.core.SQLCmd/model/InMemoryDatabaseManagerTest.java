@@ -1,5 +1,7 @@
-import ua.com.juja.core.SQLCmd.DatabaseManager;
-import ua.com.juja.core.SQLCmd.InMemoryDatabaseManager;
+package model;
+
+import ua.com.juja.core.SQLCmd.model.DatabaseManager;
+import ua.com.juja.core.SQLCmd.model.InMemoryDatabaseManager;
 
 public class InMemoryDatabaseManagerTest extends DatabaseManagerTest {
     @Override

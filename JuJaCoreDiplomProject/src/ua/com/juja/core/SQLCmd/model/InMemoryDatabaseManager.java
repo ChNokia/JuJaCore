@@ -1,4 +1,4 @@
-package ua.com.juja.core.SQLCmd;
+package ua.com.juja.core.SQLCmd.model;
 
 import java.util.Arrays;
 

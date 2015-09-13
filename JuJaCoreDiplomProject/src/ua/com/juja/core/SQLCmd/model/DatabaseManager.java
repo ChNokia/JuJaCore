@@ -1,4 +1,4 @@
-package ua.com.juja.core.SQLCmd;
+package ua.com.juja.core.SQLCmd.model;
 
 public interface DatabaseManager {
     public DataSet[] getTableData(String tableName);

@@ -1,5 +1,7 @@
-import ua.com.juja.core.SQLCmd.DatabaseManager;
-import ua.com.juja.core.SQLCmd.JDBCDatabaseManager;
+package model;
+
+import ua.com.juja.core.SQLCmd.model.DatabaseManager;
+import ua.com.juja.core.SQLCmd.model.JDBCDatabaseManager;
 
 public class JDBCDatabaseManagerTest extends DatabaseManagerTest {
     @Override
