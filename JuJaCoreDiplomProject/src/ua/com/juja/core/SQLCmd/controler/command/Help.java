@@ -17,6 +17,10 @@ public class Help implements Command {
     @Override
     public void process(String command) {
         view.write ("Існуючі команди:");
+
+        view.write ("\tconnect|database|username|password");
+        view.write ("\t\tдля під'єднання до бази даних: ім'я бази даних, ім'я користувача та пароль");
+
         view.write ("\tlist");
         view.write ("\t\tдля отримання списку всіх таблиць бази, до якої підключилися");
 
