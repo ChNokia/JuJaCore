@@ -64,4 +64,9 @@ public class InMemoryDatabaseManager implements DatabaseManager {
 
         return new String[]{"name", "password", "user_id"};
     }
+
+    @Override
+    public boolean isConnected() {
+        return true;
+    }
 }

@@ -17,6 +17,6 @@ public class Exit implements Command {
     @Override
     public void process(String command) {
         view.write("Програма завершила робоу!");
-        System.exit(0);
+        throw new ExitExceptions();
     }
 }

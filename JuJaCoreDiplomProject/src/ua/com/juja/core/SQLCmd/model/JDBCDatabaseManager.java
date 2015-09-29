@@ -69,7 +69,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
 
-            return new DataSet[0];
+            return null;
         }
     }
 
@@ -95,7 +95,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
 
-            return new String[0];
+            return null;
         }
     }
 
@@ -191,7 +191,12 @@ public class JDBCDatabaseManager implements DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
 
-            return new String[0];
+            return null;
         }
+    }
+
+    @Override
+    public boolean isConnected() {
+        return connection != null;
     }
 }

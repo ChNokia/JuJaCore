@@ -14,4 +14,6 @@ public interface DatabaseManager {
     public void update(String tableName, int id, DataSet newValue);
 
     public String[] getTableColumns(String tableName);
+
+    boolean isConnected();
 }

@@ -4,13 +4,15 @@ import ua.com.juja.core.SQLCmd.model.DatabaseManager;
 import ua.com.juja.core.SQLCmd.view.View;
 
 public class Connect implements Command {
-    private static final int COUNT_CONNECT_DATA = "connect|database|username|password".split("\\|").length;
+    private static final String SAMPLE_INPUT = "connect|database|username|password";
+    private static int COUNT_SAMPLE_INPUT;
     private DatabaseManager manager;
     private View view;
 
     public Connect(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
+        COUNT_SAMPLE_INPUT = SAMPLE_INPUT.split("\\|").length;
     }
 
     @Override
@@ -23,8 +25,8 @@ public class Connect implements Command {
         try {
             String[] data = command.split("\\|");
 
-            if ( data.length != COUNT_CONNECT_DATA ) {
-                throw new IllegalArgumentException(String.format("Невірно кількість параметрів розділених знаком '|', очікується %s, але є: %s", COUNT_CONNECT_DATA, data.length));
+            if ( data.length != COUNT_SAMPLE_INPUT) {
+                throw new IllegalArgumentException(String.format("Невірно кількість параметрів розділених знаком '|', очікується %s, але є: %s", COUNT_SAMPLE_INPUT, data.length));
             }
 
             String database = data[1];
@@ -32,11 +34,10 @@ public class Connect implements Command {
             String password = data[3];
 
             manager.connect(database, username, password);
+            view.write("Під'єднання до бази даних успішне!");
         } catch (Exception e) {
             printError(e);
         }
-
-        view.write("Під'єднання до бази даних успішне!");
     }
 
     private void printError(Exception e) {
