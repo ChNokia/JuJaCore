@@ -9,8 +9,8 @@ public class Main {
     public static void main(String[] args) {
         View view = new Console();
         DatabaseManager manager = new JDBCDatabaseManager();
-        MainControler controler = new MainControler(view, manager);
+        MainController controller = new MainController(view, manager);
 
-        controler.run();
+        controller.run();
     }
 }

@@ -4,12 +4,12 @@ import ua.com.juja.core.SQLCmd.controler.command.*;
 import ua.com.juja.core.SQLCmd.model.DatabaseManager;
 import ua.com.juja.core.SQLCmd.view.View;
 
-public class MainControler {
+public class MainController {
     private View view;
     private DatabaseManager manager;
     private Command[] commands;
 
-    public MainControler(View view, DatabaseManager manager) {
+    public MainController(View view, DatabaseManager manager) {
         this.view = view;
         this.manager = manager;
         this.commands = new Command[]{new Connect(manager, view)
