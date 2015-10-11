@@ -27,16 +27,27 @@ public class Find implements Command {
     }
 
     private void printTable(String tableName) {
-        DataSet[] tableData = null;
-        tableData = manager.getTableData(tableName);
+        try {
+            DataSet[] tableData = null;
+            tableData = manager.getTableData(tableName);
 
-        if ( tableData == null ) { //TODO: empty table
+        /*if ( tableData == null ) { //TODO: empty table
             view.write("Помилка! Причина в таблиці " + tableName);
 
             return;
+        }*/
+            printHeader(manager.getTableColumns(tableName));
+            printData(tableData);
+        }  catch (Exception e) {
+            printError(e);
         }
-        printHeader(manager.getTableColumns(tableName));
-        printData(tableData);
+    }
+
+    private void printError(Exception e) {
+        String message = e.getMessage();
+
+        view.write("Помилка! Причина: " +  message);
+        view.write("Повтори спробу!");
     }
 
     private void printData(DataSet[] tableData) {

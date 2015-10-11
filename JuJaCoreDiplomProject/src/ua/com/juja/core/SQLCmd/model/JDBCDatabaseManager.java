@@ -67,7 +67,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
             return result;
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace(); //TODO: Debug mode
+            throwSQLException(e);
 
             return null;
         }
@@ -93,7 +94,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
             return tables;
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throwSQLException(e);
 
             return null;
         }
@@ -108,7 +110,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:postgresql://127.0.0.1:5432/" + database, userName,
+                    "jdbc:postgresql://127.0.0.1:2323/" + database, userName,
                     password);
         } catch (SQLException e) {
             connection = null;
@@ -124,7 +126,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
             statement.executeUpdate("DELETE from public." + tableName);
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throwSQLException(e);
         }
     }
 
@@ -142,7 +145,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
                     ") VALUES (" + values + ")");
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throwSQLException(e);
         }
     }
 
@@ -165,7 +169,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throwSQLException(e);
         }
     }
 
@@ -189,7 +194,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
             return result;
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace(); //TODO: Debug mode
+            throwSQLException(e);
 
             return null;
         }
@@ -198,5 +204,9 @@ public class JDBCDatabaseManager implements DatabaseManager {
     @Override
     public boolean isConnected() {
         return connection != null;
+    }
+
+    private void throwSQLException(SQLException e) {
+        throw new IllegalArgumentException(e);
     }
 }
